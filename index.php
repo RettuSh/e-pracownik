@@ -1,5 +1,5 @@
 <?php
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php';
+require_once 'bootstrap.php';
 
-echo $twig->render('index.html.twig', array('name' => 'Fabien'));
+$twig->display('index.html.twig', array('name' => 'Index'));
