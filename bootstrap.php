@@ -5,31 +5,29 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'a
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'config.php';
 
 
+use Assetic\AssetManager;
 use Assetic\AssetWriter;
+use Assetic\Extension\Twig\AsseticExtension;
 use Assetic\Extension\Twig\TwigFormulaLoader;
 use Assetic\Extension\Twig\TwigResource;
-use Assetic\Factory\LazyAssetManager;
 use Assetic\Factory\AssetFactory;
-use Assetic\AssetManager;
-use Assetic\FilterManager;
-use Assetic\Extension\Twig\AsseticExtension;
-use Symfony\Component\Finder\Finder;
+use Assetic\Factory\LazyAssetManager;
 use Assetic\Filter\LessFilter;
-use Assetic\Filter\LessphpFilter;
+use Assetic\FilterManager;
+use Symfony\Component\Finder\Finder;
 
-$loader = new Twig_Loader_Filesystem('assets/views/');
-$options = array(
-    'cache' => false,
-    'debug' => true
-);
+$loader = new Twig_Loader_Filesystem(VIEWS_PATH);
+
+$options = [
+    'cache' => DEBUG_APP ? false : 'cache'
+];
 
 $twig = new Twig_Environment($loader, $options);
 
 $assetManager = new AssetManager();
 $filterManager = new FilterManager();
-//$filterManager->set('less', new LessFilter('/opt/local/bin/node'));
-$filterManager->set('less', new LessphpFilter());
-//asset factory
+$filterManager->set('less', new LessFilter(NODE_PATH, [NODE_MODULE_PATH]));
+
 $assetFactory = new AssetFactory('assets/');
 $assetFactory->setDebug(false);
 $assetFactory->setAssetManager($assetManager);
